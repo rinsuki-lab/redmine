@@ -92,7 +92,16 @@
     <%= label_tag "query_sort_criteria_direction_" + i.to_s,
                   l(:description_query_sort_criteria_direction), :class => "hidden-for-sighted" %>
     <%= select_tag("query[sort_criteria][#{i}][]",
-                    options_for_select([[], [l(:label_ascending), 'asc'], [l(:label_descending), 'desc']], @query.sort_criteria_order(i)),
+                    options_for_select(
+                      [
+                        [],
+                        [l(:label_ascending), 'asc'],
+                        [l(:label_descending), 'desc'],
+                        [l(:label_ascending_null_last), 'asc nulls last'],
+                        [l(:label_descending_null_first), 'desc nulls first']
+                      ],
+                      @query.sort_criteria_order(i)
+                    ),
                     :id => "query_sort_criteria_direction_" + i.to_s) %>
     <br />
     <% end %>

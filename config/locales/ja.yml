@@ -786,6 +786,8 @@ ja:
   label_sort: ソート条件
   label_ascending: 昇順
   label_descending: 降順
+  label_ascending_null_last: 昇順、値がない場合は最後に
+  label_descending_null_first: 降順、値がない場合は最初に
   label_date_from_to: "%{start}から%{end}まで"
   label_days_to_html: "%{date} までの%{days}日間"
   label_wiki_content_added: Wikiページの追加

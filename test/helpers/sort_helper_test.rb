@@ -102,6 +102,23 @@ class SortHelperTest < Redmine::HelperTest
     assert_equal 'sort-by-foo-bar sort-asc', sort_css_classes
   end
 
+  def test_nulls_sort
+    sort_init 'attr1', 'desc nulls first'
+    sort_update(['attr1', 'attr2'])
+
+    assert_equal ['attr1 DESC NULLS FIRST'], sort_clause
+  end
+
+  def test_params_nulls_sort
+    @sort_param = 'attr1,attr2:asc nulls last'
+
+    sort_init 'attr1', 'desc'
+    sort_update({'attr1' => 'table1.attr1', 'attr2' => 'table2.attr2'})
+
+    assert_equal ['table1.attr1 ASC', 'table2.attr2 ASC NULLS LAST'], sort_clause
+    assert_equal 'attr1,attr2:asc nulls last', @session['foo_bar_sort']
+  end
+
   private
 
   def controller_name; 'foo'; end

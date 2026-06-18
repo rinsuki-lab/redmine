@@ -33,8 +33,17 @@ module Redmine
       normalize!
     end
 
+    def self.allowed_order?(order)
+      case order
+      when 'desc', 'asc nulls last', 'desc nulls first'
+        true
+      else
+        false
+      end
+    end
+
     def to_param
-      self.collect {|k, o| k + (o == 'desc' ? ':desc' : '')}.join(',')
+      self.collect {|k, o| self.class.allowed_order?(o) ? "#{k}:#{o}" : k}.join(',')
     end
 
     def to_a
@@ -91,7 +100,17 @@ module Redmine
     def normalize!
       self.reject! {|s| s.first.blank?}
       self.uniq! {|s| s.first}
-      self.collect! {|s| s = Array(s); [s.first, (s.last == false || s.last.to_s == 'desc') ? 'desc' : 'asc']}
+      self.collect! do |s|
+        s = Array(s)
+        [s.first,
+         if s.last == false
+           'desc'
+         elsif self.class.allowed_order? s.last
+           s.last
+         else
+           'asc'
+         end]
+      end
       self.replace self.first(3)
     end
 
